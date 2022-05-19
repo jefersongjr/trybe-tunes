@@ -37,12 +37,10 @@ class Login extends React.Component {
           name="nameLogin"
           value={ nameLogin }
           handleChange={ this.handleChange }
-          data-testid="login-name-input"
         />
         <Button
           getUser={ getUser }
           isDisabled={ isDisabled }
-          data-testid="login-submit-button"
         />
       </div>
     );

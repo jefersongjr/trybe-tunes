@@ -9,6 +9,7 @@ class Button extends React.Component {
         type="button"
         onClick={ getUser }
         disabled={ isDisabled }
+        data-testid="login-submit-button"
       >
         Entrar
       </button>

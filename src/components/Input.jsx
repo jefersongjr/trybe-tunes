@@ -5,7 +5,13 @@ class Input extends React.Component {
   render() {
     const { type, nameLogin, name, handleChange } = this.props;
     return (
-      <input type={ type } name={ name } value={ nameLogin } onChange={ handleChange } />
+      <input
+        type={ type }
+        name={ name }
+        value={ nameLogin }
+        onChange={ handleChange }
+        data-testid="login-name-input"
+      />
     );
   }
 }
