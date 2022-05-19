@@ -14,7 +14,7 @@ class Content extends React.Component {
       <div>
         <BrowserRouter>
           <Route exact path="/" component={ Login } />
-          <Route path="/search" component={ Search } />
+          <Route exact path="/search" component={ Search } />
           <Route path="/album/:id" component={ Album } />
           <Route path="/favorites" component={ Favorites } />
           <Route path="/Profile" component={ Profile } />
