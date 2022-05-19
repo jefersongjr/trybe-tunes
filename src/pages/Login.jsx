@@ -1,12 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { createUser } from '../services/userAPI';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import { getUser } from '../services/userAPI';
+import Loading from '../components/Loading';
 
 class Login extends React.Component {
   state = {
     nameLogin: '',
     isDisabled: true,
+    isLoading: false,
   };
 
   handleChange = ({ target }) => {
@@ -28,23 +31,42 @@ class Login extends React.Component {
     }
   }
 
+  buttonFuction = async () => {
+    this.setState({
+      isLoading: true,
+    });
+    const { history } = this.props;
+    const { nameLogin } = this.state;
+    await createUser({ name: nameLogin });
+
+    history.push('/search');
+  }
+
   render() {
-    const { nameLogin, isDisabled } = this.state;
+    const { nameLogin, isDisabled, isLoading } = this.state;
     return (
       <div data-testid="page-login">
-        <Input
-          type="text"
-          name="nameLogin"
-          value={ nameLogin }
-          handleChange={ this.handleChange }
-        />
-        <Button
-          getUser={ getUser }
-          isDisabled={ isDisabled }
-        />
+        { isLoading
+          ? <Loading />
+          : (
+            <div>
+              <Input
+                type="text"
+                name="nameLogin"
+                value={ nameLogin }
+                handleChange={ this.handleChange }
+              />
+              <Button
+                createUser={ this.buttonFuction }
+                isDisabled={ isDisabled }
+              />
+            </div>)}
       </div>
     );
   }
 }
 
+Login.propTypes = {
+  history: PropTypes.func.isRequired,
+};
 export default Login;

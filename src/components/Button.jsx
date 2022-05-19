@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 
 class Button extends React.Component {
   render() {
-    const { isDisabled, getUser } = this.props;
+    const { isDisabled, createUser } = this.props;
     return (
       <button
         type="button"
-        onClick={ getUser }
+        onClick={ createUser }
         disabled={ isDisabled }
         data-testid="login-submit-button"
       >
@@ -18,7 +18,7 @@ class Button extends React.Component {
 }
 
 Button.propTypes = {
-  getUser: PropTypes.func.isRequired,
+  createUser: PropTypes.func.isRequired,
   isDisabled: PropTypes.bool.isRequired,
 };
 
