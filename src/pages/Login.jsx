@@ -54,10 +54,12 @@ class Login extends React.Component {
                 type="text"
                 name="nameLogin"
                 value={ nameLogin }
+                test="login-name-input"
                 handleChange={ this.handleChange }
               />
               <Button
-                createUser={ this.buttonFuction }
+                test="login-submit-button"
+                handleButton={ this.buttonFuction }
                 isDisabled={ isDisabled }
               />
             </div>)}
