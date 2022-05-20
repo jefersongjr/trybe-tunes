@@ -77,10 +77,12 @@ class Search extends React.Component {
           ) }
 
         <div>
-          { colection.length > 0 && <p>
-            Resultado de álbuns de:
-            { searchInput }
-          </p> }
+          { colection.length > 0
+            && (
+              <p>
+                Resultado de álbuns de:
+                { searchInput }
+              </p>)}
           { colection.map((album) => (
             <Link
               key={ album.collectionName }
