@@ -64,6 +64,7 @@ class Album extends React.Component {
                 </span>
                 <MusicCard
                   previewUrl={ track.previewUrl }
+                  test={ `checkbox-music-${track.trackId}` }
                 />
               </div>
             ))}
