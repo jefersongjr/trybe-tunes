@@ -8,6 +8,7 @@ class Album extends React.Component {
   state ={
     infoAlbum: '',
     infoArtist: {},
+    album: [],
   }
 
   async componentDidMount() {
@@ -21,8 +22,11 @@ class Album extends React.Component {
       collectionName: infoAlbum[0].collectionName,
       artworkUrl60: infoAlbum[0].artworkUrl60 };
 
+    const tracks = infoAlbum.filter((musics) => musics.previewUrl);
+
     this.setState({
       infoArtist: infos,
+      album: tracks,
     });
   }
 
@@ -32,23 +36,39 @@ class Album extends React.Component {
   }
 
   render() {
-    const { infoArtist } = this.state;
+    const { infoArtist, album } = this.state;
     return (
       <div data-testid="page-album">
         <Header />
-        <section>
-          <img src={ infoArtist.artworkUrl60 } alt="" />
-          <h3 data-testid="album-name">
-            { infoArtist.collectionName}
-          </h3>
-          <p data-testid="artist-name">
-            { infoArtist.artistName}
-          </p>
-        </section>
+        <main id="preview-album">
+          <section id="albumInfo">
+            <div className="image-card">
+              <img
+                src={ infoArtist.artworkUrl60 }
+                alt={ infoArtist.collectionName }
+              />
+            </div>
+            <h3 data-testid="album-name">
+              { infoArtist.collectionName}
+            </h3>
+            <p data-testid="artist-name">
+              { infoArtist.artistName}
+            </p>
+          </section>
 
-        <section>
-          <MusicCard />
-        </section>
+          <section id="section-preview-music">
+            { album.map((track) => (
+              <div key={ track.trackName }>
+                <span>
+                  { track.trackName }
+                </span>
+                <MusicCard
+                  previewUrl={ track.previewUrl }
+                />
+              </div>
+            ))}
+          </section>
+        </main>
       </div>
     );
   }

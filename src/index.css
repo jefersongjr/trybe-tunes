@@ -35,3 +35,13 @@ code {
   flex-wrap: wrap;
   justify-content: space-around;
 }
+
+#preview-album {
+  display: flex;
+  justify-content: center;
+}
+
+#section-preview-music {
+  display: flex;
+  flex-direction: column;
+}
