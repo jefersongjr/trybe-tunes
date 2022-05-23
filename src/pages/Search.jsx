@@ -81,28 +81,31 @@ class Search extends React.Component {
           ) }
 
         { colection.length > 0
-            && (
-              <section>
-                <p>
-                  {`Resultado de álbuns de: ${artist} `}
-                </p>
-                <div id="albumSection">
-                  { colection.map((album) => (
-                    <Link
-                      key={ album.collectionName }
-                      to={ `/album/${album.collectionId}` }
-                      data-testid={ `link-to-album-${album.collectionId}` }
-                      className="albumLink"
-                    >
-                      <Card
-                        image={ album.artworkUrl100 }
-                        albumName={ album.collectionName }
-                        singer={ album.artistName }
-                      />
-                    </Link>
-                  ))}
-                </div>
-              </section>) }
+          ? (
+            <section>
+              <p>
+                {`Resultado de álbuns de: ${artist} `}
+              </p>
+              <div id="albumSection">
+                { colection.map((album) => (
+                  <Link
+                    key={ album.collectionName }
+                    to={ `/album/${album.collectionId}` }
+                    data-testid={ `link-to-album-${album.collectionId}` }
+                    className="albumLink"
+                  >
+                    <Card
+                      image={ album.artworkUrl100 }
+                      albumName={ album.collectionName }
+                      singer={ album.artistName }
+                    />
+                  </Link>
+                ))}
+              </div>
+            </section>)
+          : (
+            <p> Nenhum álbum foi encontrado </p>
+          )}
 
       </div>
     );
