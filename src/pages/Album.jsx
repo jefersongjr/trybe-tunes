@@ -3,12 +3,16 @@ import PropTypes from 'prop-types';
 import getMusics from '../services/musicsAPI';
 import Header from '../components/Header';
 import MusicCard from '../components/MusicCard';
+import { addSong } from '../services/favoriteSongsAPI';
+import Loading from '../components/Loading';
 
 class Album extends React.Component {
-  state ={
+  state = {
     infoAlbum: '',
     infoArtist: {},
     album: [],
+    favorites: [],
+    isLoading: false,
   }
 
   async componentDidMount() {
@@ -22,12 +26,14 @@ class Album extends React.Component {
       collectionName: infoAlbum[0].collectionName,
       artworkUrl60: infoAlbum[0].artworkUrl60 };
 
-    const tracks = infoAlbum.filter((musics) => musics.previewUrl);
+    const tracks = infoAlbum.filter((musics) => musics.kind === 'song');
+    const track1 = tracks.map((object) => ({ ...object, checked: false }));
 
     this.setState({
       infoArtist: infos,
-      album: tracks,
+      album: [...track1],
     });
+    console.log(track1);
   }
 
   fetchUrlId = () => {
@@ -35,41 +41,70 @@ class Album extends React.Component {
     return match.params.id;
   }
 
+  handleFavorite = async ({ target }) => {
+    const { name } = target;
+    const { favorites, album } = this.state;
+    if (!favorites.includes(name)) {
+      this.setState({
+        favorites: [...favorites, name],
+        isLoading: true,
+      });
+
+      album.forEach((object) => {
+        if (`${object.trackId}` === name) {
+          object.checked = !object.checked;
+        }
+        console.log(object.trackId);
+        console.log(name);
+      });
+      await addSong(name);
+    }
+    this.setState({
+      isLoading: false,
+    });
+  };
+
   render() {
-    const { infoArtist, album } = this.state;
+    const { infoArtist, album, isLoading } = this.state;
     return (
       <div data-testid="page-album">
         <Header />
-        <main id="preview-album">
-          <section id="albumInfo">
-            <div className="image-card">
-              <img
-                src={ infoArtist.artworkUrl60 }
-                alt={ infoArtist.collectionName }
-              />
-            </div>
-            <h3 data-testid="album-name">
-              { infoArtist.collectionName}
-            </h3>
-            <p data-testid="artist-name">
-              { infoArtist.artistName}
-            </p>
-          </section>
+        { isLoading ? (
+          <Loading />)
+          : (
+            <main id="preview-album">
+              <section id="albumInfo">
+                <div className="image-card">
+                  <img
+                    src={ infoArtist.artworkUrl60 }
+                    alt={ infoArtist.collectionName }
+                  />
+                </div>
+                <h3 data-testid="album-name">
+                  { infoArtist.collectionName}
+                </h3>
+                <p data-testid="artist-name">
+                  { infoArtist.artistName}
+                </p>
+              </section>
 
-          <section id="section-preview-music">
-            { album.map((track) => (
-              <div key={ track.trackName }>
-                <span>
-                  { track.trackName }
-                </span>
-                <MusicCard
-                  previewUrl={ track.previewUrl }
-                  test={ `checkbox-music-${track.trackId}` }
-                />
-              </div>
-            ))}
-          </section>
-        </main>
+              <section id="section-preview-music">
+                { album.map((track) => (
+                  <div key={ track.trackName }>
+                    <span>
+                      { track.trackName }
+                    </span>
+                    <MusicCard
+                      previewUrl={ track.previewUrl }
+                      test={ `checkbox-music-${track.trackId}` }
+                      trackId={ track.trackId }
+                      checked={ track.checked }
+                      handleFavorite={ this.handleFavorite }
+                    />
+                  </div>
+                ))}
+              </section>
+            </main>)}
       </div>
     );
   }
