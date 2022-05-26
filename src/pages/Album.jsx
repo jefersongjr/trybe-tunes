@@ -11,7 +11,7 @@ class Album extends React.Component {
     infoAlbum: '',
     infoArtist: {},
     album: [],
-    favoriteMusics: [],
+    favoriteMusics: '',
     isLoading: false,
   }
 
@@ -33,8 +33,6 @@ class Album extends React.Component {
       infoArtist: infos,
       album: [...track1],
     });
-
-    await getFavoriteSongs();
   }
 
   fetchUrlId = () => {
@@ -49,18 +47,16 @@ class Album extends React.Component {
       isLoading: true,
     });
 
-    console.log(name);
-
     album.forEach((object) => {
       if (`${object.trackId}` === `${JSON.parse(name).trackId}`) {
         object.checked = !object.checked;
       }
     });
 
-    console.log(JSON.parse(name).trackId);
-
-    if (!favoriteMusics.includes(name)) {
-      await addSong(JSON.parse(name));
+    console.log(favoriteMusics);
+    const x = album.filter((object) => object.checked === true);
+    if (x.length > 0) {
+      await addSong(...x);
     }
 
     this.setState({
