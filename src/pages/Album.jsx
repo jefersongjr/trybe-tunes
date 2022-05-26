@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import getMusics from '../services/musicsAPI';
 import Header from '../components/Header';
 import MusicCard from '../components/MusicCard';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 import Loading from '../components/Loading';
 
 class Album extends React.Component {
@@ -11,7 +11,7 @@ class Album extends React.Component {
     infoAlbum: '',
     infoArtist: {},
     album: [],
-    favorites: [],
+    favoriteMusics: [],
     isLoading: false,
   }
 
@@ -33,7 +33,8 @@ class Album extends React.Component {
       infoArtist: infos,
       album: [...track1],
     });
-    console.log(track1);
+
+    await getFavoriteSongs();
   }
 
   fetchUrlId = () => {
@@ -43,23 +44,27 @@ class Album extends React.Component {
 
   handleFavorite = async ({ target }) => {
     const { name } = target;
-    const { favorites, album } = this.state;
-    if (!favorites.includes(name)) {
-      this.setState({
-        favorites: [...favorites, name],
-        isLoading: true,
-      });
-
-      album.forEach((object) => {
-        if (`${object.trackId}` === name) {
-          object.checked = !object.checked;
-        }
-        console.log(object.trackId);
-        console.log(name);
-      });
-      await addSong(name);
-    }
+    const { album, favoriteMusics } = this.state;
     this.setState({
+      isLoading: true,
+    });
+
+    console.log(name);
+
+    album.forEach((object) => {
+      if (`${object.trackId}` === `${JSON.parse(name).trackId}`) {
+        object.checked = !object.checked;
+      }
+    });
+
+    console.log(JSON.parse(name).trackId);
+
+    if (!favoriteMusics.includes(name)) {
+      await addSong(JSON.parse(name));
+    }
+
+    this.setState({
+      favoriteMusics: await getFavoriteSongs(),
       isLoading: false,
     });
   };
@@ -95,6 +100,7 @@ class Album extends React.Component {
                       { track.trackName }
                     </span>
                     <MusicCard
+                      track={ track }
                       previewUrl={ track.previewUrl }
                       test={ `checkbox-music-${track.trackId}` }
                       trackId={ track.trackId }
